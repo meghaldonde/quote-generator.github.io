@@ -5,6 +5,8 @@ const twitterBtn = document.getElementById('twitter');
 const newQuoteBtn = document.getElementById('new-quote');
 const simpsonsQuoteBtn = document.getElementById('simpson-quote');
 const imgSimpsonCharacter = document.getElementById('simpson-character');
+let quote = "";
+let author = "";
 
 //custom server to avoid  CORS issue
 const proxyUrl = 'https://dry-cove-58467.herokuapp.com/';
@@ -62,29 +64,32 @@ async function getQuote(quoteType) {
 
         //check if simpsons quote requested
         if (quoteType === 'simpsons quote') {
-            authorText.innerText = data[0].character;
-            quoteText.innerText = data[0].quote;
+            quote = data[0].quote;
+            author = data[0].character;
+            //authorText.innerText = data[0].character;
+            //quoteText.innerText = data[0].quote;
             showCharacterImage(data[0].image);
 
         } else { //default quote API
-            //If response has no author , reset to 'unknown'
-            if (data.quoteAuthor === '') {
-                data.quoteAuthor = 'Unknown';
-            } else {
-                authorText.innerText = data.quoteAuthor;
+            quote = data.quoteText;
+            author = data.quoteAuthor;
 
-            }
-
-            //Dynamically Reduce quote font size for long quote
-            if (data.quoteText.length > 120) {
-                quoteText.classList.add('long-quote');
-            } else {
-                quoteText.classList.remove('long-quote');
-            }
-
-            quoteText.innerText = data.quoteText;
         }
+        //If response has no author , reset to 'unknown'
+        if (author === '') {
+            author = 'Unknown';
+        }
+        authorText.innerText = author;
 
+        //Dynamically Reduce quote font size for long quote
+        const maxQuoteLength = 80;
+        if (quote.length > maxQuoteLength) {
+            console.log("long " + quote.length);
+            quoteText.classList.add('long-quote');
+        } else {
+            quoteText.classList.remove('long-quote');
+        }
+        quoteText.innerText = quote;
 
         removeLoadingSpinner();
 
