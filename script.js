@@ -37,13 +37,15 @@ function showCharacterImage(imageUrl) {
         imgSimpsonCharacter.hidden = false;
         imgSimpsonCharacter.src = imageUrl;
     } else {
-        imgSimpsonCharacter.hidden = true;
+        hideCharacterImage();
     }
 }
 
 function hideCharacterImage() {
     imgSimpsonCharacter.hidden = true;
 }
+
+
 async function getQuote(quoteType) {
 
     showLoadingSpinner();
@@ -51,11 +53,9 @@ async function getQuote(quoteType) {
 
     try {
 
-        console.log(quoteType);
         let url = proxyUrl + apiUrl;
         if (quoteType === 'simpsons quote') {
             url = simpsonsQuoteUrl;
-
 
         }
 
@@ -66,8 +66,6 @@ async function getQuote(quoteType) {
         if (quoteType === 'simpsons quote') {
             quote = data[0].quote;
             author = data[0].character;
-            //authorText.innerText = data[0].character;
-            //quoteText.innerText = data[0].quote;
             showCharacterImage(data[0].image);
 
         } else { //default quote API
@@ -84,7 +82,6 @@ async function getQuote(quoteType) {
         //Dynamically Reduce quote font size for long quote
         const maxQuoteLength = 80;
         if (quote.length > maxQuoteLength) {
-            console.log("long " + quote.length);
             quoteText.classList.add('long-quote');
         } else {
             quoteText.classList.remove('long-quote');
@@ -127,5 +124,5 @@ simpsonsQuoteBtn.addEventListener('click', () => {
 });
 twitterBtn.addEventListener('click', tweetQuote);
 
-//call onLoad
+//call getQuote on document Load 
 getQuote('new quote');
